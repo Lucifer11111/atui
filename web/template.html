@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atui - 阿里通信组件库</title>
+    <script>
+      var hostname = location.hostname
+      var env = 'online'
+      var root = '/'
+      var vuePath = '/vue.js'
+      if(~hostname.indexOf('localhost') || ~hostname.indexOf('127.0.0.1')){
+        env = 'dev'
+        root = '//' + hostname + ':8080/build/'
+        vuePath = '//' + hostname + ':8080/dist' + vuePath
+      }
+    </script>
+    <script type="text/javascript">
+      document.write('<link rel="stylesheet" type="text/css" id="J_ThemeCss" href="' + root + 'greater-blue.css" \/>')
+    </script>
+    
+  </head>
+  <body>
+    <div id="app"> 
+      hello atui  dfd
+    </div>
+    
+    <script type="text/javascript">
+      document.write('<script type="text/javascript" src="' + vuePath + '"><\/script>');
+      document.write('<script type="text/javascript" src="' + root + 'atui.js"><\/script>');
+      document.write('<script type="text/javascript" src="' + root + 'atuiWidget.js"><\/script>');
+    </script>
+    <script src="./bundle.js"></script>
+  </body>
+</html>
