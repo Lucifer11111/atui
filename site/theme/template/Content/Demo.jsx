@@ -39,7 +39,7 @@ export default class Demo extends React.Component {
       style,
       highlightedStyle,
     } = props;
-
+    
     const randomEle = 'J_vue_' + Math.random().toString(36).substring(2);
 
     const execScript = () => {

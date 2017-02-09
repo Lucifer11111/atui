@@ -11,6 +11,8 @@ title:
 
 ## en-US
 
+primary button, support config of button size
+
 ````jsx
 <v-button large primary value="大号+主按钮"></v-button>
 <v-button primary value="中号+主按钮"></v-button>

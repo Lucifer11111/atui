@@ -5,6 +5,24 @@ var precss       = require('precss')
 var autoprefixer = require('autoprefixer')
 var projectRoot = path.resolve(__dirname, 'src/')
 
+
+function entity2html(htmlStr){
+  var escapeEntityMap = {
+     '&lt;':'<',
+     '&gt;':'>',
+     '&quot;':'"',
+     '&#x27;':"'",
+     '&#x2F;':'/'
+  };
+
+  for(var k in escapeEntityMap){
+    htmlStr = htmlStr.replace(new RegExp(k, 'g'), escapeEntityMap[k])
+  }
+  return htmlStr
+}
+
+
+
 module.exports = {
   entry: {
     bundle: ['./web/index.js']
@@ -66,12 +84,42 @@ module.exports = {
         loader: 'url-loader?limit=100000'
     },{
         test: /\.md/,
-        loader: 'vue-markdown-loader'
+        loader: 'markdown-data-loader'
     }],
     noParse:[/addr.js/,/^vue$/]
   },
+  MarkdownData: {
+    languages: ['zh-CN', 'en-US'],
+    defaultLanguage: 'zh-cn'
+  },
   vueMarkdown: {
+    preprocess: function(markdownIt, source){
+      return source
+    },
+    prerenderVueTemplate: function(html, $){
+      var root = $.root()
+      var codeBlock = $('code.language-vue-script')
+      var markupBlock = $('code.language-jsx')
+      var code = codeBlock.text()
+      var markup = markupBlock.text()
+      var randomId = 'J_vue_' + Math.random().toString(36).substring(2)
+      code =code.replace(/([^\r?\n]el:\s*['"]{1})body(['"]{1})/, '$1#'+ randomId +'$2')
+      console.log(code)
+      // move markup to codeblock to form the final markupblock
+      codeBlock.prepend('<div>' + markupBlock.html() + '</div>')
 
+      //create template container
+      root.prepend('<div id="'+randomId+'"><div>')
+      $('#'+randomId).append(entity2html(markup))
+
+      //create script tag
+      root.append('<script>'+code+'</script>')
+
+      //remove markupblock
+      markupBlock.parent('pre').remove()
+
+      return $.html()
+    }
   },
   vue: {
     loaders: {
